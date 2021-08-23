@@ -11,18 +11,18 @@ public class User extends AuditModel {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "first_name")
-    @NotNull(message = "User must be between 4 to 15 characters")
-    @Size(min = 4, max = 15)
     private String firstName;
 
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "user_name")
+    @Column(name = "user_name", unique = true)
+    @NotNull(message = "User must be between 4 to 15 characters")
+    @Size(min = 4, max = 15)
     private String userName;
 
     @Column(name = "password")
@@ -31,7 +31,7 @@ public class User extends AuditModel {
     public User() {
     }
 
-    public User(@NotNull(message = "User must be between 4 to 15 characters") @Size(min = 4, max = 15) String firstName, String lastName, String userName, String password) {
+    public User(String firstName, String lastName, @NotNull(message = "User must be between 4 to 15 characters") @Size(min = 4, max = 15) String userName, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;

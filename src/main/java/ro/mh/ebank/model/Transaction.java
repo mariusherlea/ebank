@@ -1,13 +1,12 @@
 package ro.mh.ebank.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import javax.persistence.*;
-import java.util.Objects;
+
 
 @Entity
-@Table(name = "transfer")
-public class Transfer extends AuditModel {
+@Table(name = "transaction")
+public class Transaction {
 
     @Id
     @Column(name = "id")
@@ -19,15 +18,21 @@ public class Transfer extends AuditModel {
     @JsonBackReference("debit")
     private Account debitAccount;
 
+    @Column(name = "final_amount_source_account")
+    private Double finalAmountSourceAccount;
+
     @OneToOne
     @JoinColumn(name = "credit_id")
     @JsonBackReference("credit")
     private Account creditAccount;
 
-    private Double tranferAmount;
+    @Column(name = "final_amount_target_account")
+    private Double finalAmountTargetAccount;
 
-    public Transfer() {
+    @Column(name = "transaction_amount")
+    private Double transactionAmount;
+
+    public Transaction() {
     }
-
 
 }

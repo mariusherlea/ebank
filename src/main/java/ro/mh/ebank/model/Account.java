@@ -1,24 +1,28 @@
 package ro.mh.ebank.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Objects;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "account")
-public class Account extends AuditModel {
+public class Account{
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    /*@OneToOne
-    @JsonManagedReference("debit, credit")*/
     private Long id;
+
+    @Column(name = "number_account", unique = true)
+    @NotNull(message = "Number account must be between 4 to 15 characters")
+    @Size(min = 4, max = 15)
+    private Long accountNumber;
+
+    @Column(name = "bank")
+    private String bank;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
@@ -26,16 +30,13 @@ public class Account extends AuditModel {
     @JsonIgnore
     private User user;
 
-     private Long accountNumber;
-
-    private String bank;
-
+    @Column(name = "amount")
     private Double amount;
 
-    private String state;
+    @Column(name = "state")
+    private State state;
 
     public Account() {
     }
-
 
 }
