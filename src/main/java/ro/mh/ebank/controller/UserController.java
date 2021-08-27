@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.mh.ebank.dto.UserDto;
+import ro.mh.ebank.exception.ResourceNotFoundException;
 import ro.mh.ebank.model.User;
 import ro.mh.ebank.service.UserService;
 
@@ -35,13 +36,19 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable(name = "id") Long id) {
+    public  ResponseEntity<Object> getUserById(@PathVariable(name = "id") Long id) {
+
+
         User user = userService.getUserById(id);
 
-        // convert entity to DTO
-        UserDto userResponse = modelMapper.map(user, UserDto.class);
 
-        return ResponseEntity.ok().body(userResponse);
+    // convert entity to DTO
+    UserDto userResponse = modelMapper.map(user, UserDto.class);
+
+    return ResponseEntity.ok().body(userResponse);
+
+
+
     }
 
     @PostMapping

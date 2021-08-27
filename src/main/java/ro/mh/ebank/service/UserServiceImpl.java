@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(long id, User userRequest) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+                .orElseThrow(() -> new ResourceNotFoundException(id));
 
         user.setFirstName(userRequest.getFirstName());
         user.setLastName(userRequest.getLastName());
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+                .orElseThrow(() -> new ResourceNotFoundException(id));
 
         userRepository.delete(user);
     }
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
         if (result.isPresent()) {
             return result.get();
         } else {
-            throw new ResourceNotFoundException("User", "id", id);
+            throw new ResourceNotFoundException(id);
         }
 
 //		User post = postRepository.findById(id)

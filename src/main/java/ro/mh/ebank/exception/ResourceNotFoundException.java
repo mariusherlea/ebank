@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ResourceNotFoundException extends RuntimeException {
 
 
-    public ResourceNotFoundException(String user, String id, long id1) {
+    public ResourceNotFoundException(Long id) {
+        System.out.println("Id non-existent "+ id);
     }
 }
