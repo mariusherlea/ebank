@@ -41,16 +41,24 @@ public class AccountController {
     @GetMapping("/{id}")
     public  ResponseEntity<Object> getAccountById(@PathVariable(name = "id") Long id) {
 
-
         Account account = accountService.getAccountById(id);
-
 
         // convert entity to DTO
         AccountDto accountResponse = modelMapper.map(account, AccountDto.class);
 
         return ResponseEntity.ok().body(accountResponse);
 
+    }
 
+    @GetMapping("/users/{usersId}/accounts")
+    public  ResponseEntity<Object> getAccountByUserId(@PathVariable(name = "usersId") Long usersId) {
+
+        Account account = accountService.getAccountByUserId(usersId);
+
+        // convert entity to DTO
+        AccountDto accountResponse = modelMapper.map(account, AccountDto.class);
+
+        return ResponseEntity.ok().body(accountResponse);
 
     }
 
@@ -69,7 +77,5 @@ public class AccountController {
         return null;
     }
 
-
- 
 
 }

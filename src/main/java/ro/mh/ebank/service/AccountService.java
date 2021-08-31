@@ -1,6 +1,7 @@
 package ro.mh.ebank.service;
 
 
+import org.springframework.data.domain.Page;
 import ro.mh.ebank.model.Account;
 import ro.mh.ebank.model.User;
 
@@ -14,4 +15,6 @@ public interface AccountService {
     Optional<Account> createAccount(Long userId, Account accountRequest);
 
     Account getAccountById(Long id);
+
+    Account getAccountByUserId(Long userId);
 }

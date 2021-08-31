@@ -4,7 +4,6 @@ package ro.mh.ebank.service;
 import org.springframework.stereotype.Service;
 import ro.mh.ebank.exception.ResourceNotFoundException;
 import ro.mh.ebank.model.Account;
-import ro.mh.ebank.model.User;
 import ro.mh.ebank.repository.AccountRepository;
 import ro.mh.ebank.repository.UserRepository;
 
@@ -48,5 +47,10 @@ public class AccountServiceImpl implements AccountService {
         } else {
             throw new ResourceNotFoundException(id);
         }
+    }
+
+    @Override
+    public Account getAccountByUserId(Long userId) {
+        return accountRepository.findByUserId(userId);
     }
 }
