@@ -1,6 +1,8 @@
 package ro.mh.ebank.service;
 
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ro.mh.ebank.exception.ResourceNotFoundException;
 import ro.mh.ebank.model.Account;
@@ -39,8 +41,10 @@ public class AccountServiceImpl implements AccountService {
                 });
     }
 
+
+
     @Override
-    public Account getAccountById(Long id) {
+    public Account getAccountById(Long id) throws ResourceNotFoundException{
         Optional<Account> result = accountRepository.findById(id);
         if (result.isPresent()) {
             return result.get();
@@ -50,7 +54,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account getAccountByUserId(Long userId) {
+    public List<Account> getAccountByUserId(Long userId) throws ResourceNotFoundException{
         return accountRepository.findByUserId(userId);
     }
 }

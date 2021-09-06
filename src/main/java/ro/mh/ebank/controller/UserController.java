@@ -1,84 +1,58 @@
 package ro.mh.ebank.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ro.mh.ebank.dto.UserDto;
-import ro.mh.ebank.exception.ResourceNotFoundException;
-import ro.mh.ebank.model.User;
-import ro.mh.ebank.service.UserService;
 
+import ro.mh.ebank.converter.UserConverter;
+import ro.mh.ebank.dto.UserDto;
+import ro.mh.ebank.model.User;
+import ro.mh.ebank.repository.UserRepository;
+import ro.mh.ebank.service.UserService;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
+
     @Autowired
-    private ModelMapper modelMapper;
+    UserRepository userRepository;
+    @Autowired
+    UserConverter converter;
+    @Autowired
+    UserService userService;
 
-    private UserService userService;
-
-    public UserController(UserService userService) {
-        super();
-        this.userService = userService;
+    @GetMapping("/findAll")
+    public List<UserDto> findAll() {
+        List<User> findAll = userRepository.findAll();
+        return converter.entityToDto(findAll);
     }
 
-    @GetMapping
-    public List<UserDto> getAllUsers() {
-
-        return userService.getAllUsers().stream().map(user -> modelMapper.map(user, UserDto.class))
-                .collect(Collectors.toList());
-    }
-
-    @GetMapping("/{id}")
-    public  ResponseEntity<Object> getUserById(@PathVariable(name = "id") Long id) {
-
-
-        User user = userService.getUserById(id);
-
-
-    // convert entity to DTO
-    UserDto userResponse = modelMapper.map(user, UserDto.class);
-
-    return ResponseEntity.ok().body(userResponse);
-
-
+    @GetMapping("/find/{ID}")
+    public UserDto findById(@PathVariable(value = "ID") Long id) {
+        User orElse = userRepository.findById(id).orElse(null);
+        return converter.entityToDto(orElse);
 
     }
 
-    @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+    @PostMapping("/save")
+    public UserDto save(@RequestBody UserDto dto) {
 
-        // convert DTO to entity
-        User userRequest = modelMapper.map(userDto, User.class);
-
-        User user = userService.createUser(userRequest);
-
-        // convert entity to DTO
-        UserDto userResponse = modelMapper.map(user, UserDto.class);
-
-        return new ResponseEntity<UserDto>(userResponse, HttpStatus.CREATED);
+        User user = converter.dtoToEntity(dto);
+        user = userRepository.save(user);
+        return converter.entityToDto(user);
     }
 
-    // change the request for DTO
-    // change the response for DTO
-    @PutMapping("/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable long id, @RequestBody UserDto userDto) {
 
-        // convert DTO to Entity
-        User userRequest = modelMapper.map(userDto, User.class);
+    @PutMapping("/update/{id}")
+    public UserDto updateUser(@PathVariable long id, @RequestBody UserDto userDto) {
 
-        User user = userService.updateUser(id, userRequest);
+        User user = converter.dtoToEntity(userDto);
+        user = userService.updateUser(id, user);
+        return converter.entityToDto(user);
 
-        // entity to DTO
-        UserDto userResponse = modelMapper.map(user, UserDto.class);
-
-        return ResponseEntity.ok().body(userResponse);
     }
 
     /*@DeleteMapping("/{id}")

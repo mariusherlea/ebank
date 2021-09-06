@@ -20,9 +20,7 @@ public class User extends AuditModel {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "user_name", unique = true)
-    @NotNull(message = "User must be between 4 to 15 characters")
-    @Size(min = 4, max = 15)
+    @Column(name = "user_name")
     private String userName;
 
     @Column(name = "password")
@@ -31,7 +29,7 @@ public class User extends AuditModel {
     public User() {
     }
 
-    public User(String firstName, String lastName, @NotNull(message = "User must be between 4 to 15 characters") @Size(min = 4, max = 15) String userName, String password) {
+    public User(String firstName, String lastName, String userName, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
@@ -83,11 +81,11 @@ public class User extends AuditModel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id.equals(user.id) &&
-                firstName.equals(user.firstName) &&
-                lastName.equals(user.lastName) &&
-                userName.equals(user.userName) &&
-                password.equals(user.password);
+        return Objects.equals(id, user.id) &&
+                Objects.equals(firstName, user.firstName) &&
+                Objects.equals(lastName, user.lastName) &&
+                Objects.equals(userName, user.userName) &&
+                Objects.equals(password, user.password);
     }
 
     @Override

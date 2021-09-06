@@ -2,18 +2,17 @@ package ro.mh.ebank.controller;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import ro.mh.ebank.dto.AccountDto;
 import ro.mh.ebank.model.Account;
 import ro.mh.ebank.service.AccountService;
 import ro.mh.ebank.service.UserService;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -50,28 +49,32 @@ public class AccountController {
 
     }
 
-    @GetMapping("/users/{usersId}/accounts")
-    public  ResponseEntity<Object> getAccountByUserId(@PathVariable(name = "usersId") Long usersId) {
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<Object> getAccountByUserId(@PathVariable(name = "userId") Long userId) {
 
-        Account account = accountService.getAccountByUserId(usersId);
+        List<Account> account = accountService.getAccountByUserId(userId);
 
-        // convert entity to DTO
-        AccountDto accountResponse = modelMapper.map(account, AccountDto.class);
+        List<AccountDto> userDtoList = mapList(account, AccountDto.class);
 
-        return ResponseEntity.ok().body(accountResponse);
+        return ResponseEntity.ok(userDtoList);
 
+    }
+
+    <S, T> List<T> mapList(List<S> source, Class<T> targetClass) {
+        return source
+                .stream()
+                .map(element -> modelMapper.map(element, targetClass))
+                .collect(Collectors.toList());
     }
 
     @PostMapping("/users/{userId}/accounts")
 
     public Account createAccount(@PathVariable(value = "userId") Long userId , @RequestBody AccountDto accountDto) {
 
-        // convert DTO to entity
         Account accountRequest = modelMapper.map(accountDto, Account.class);
 
         Optional<Account> account = accountService.createAccount(userId, accountRequest);
 
-        // convert entity to DTO
         AccountDto accountResponse = modelMapper.map(account, AccountDto.class);
 
         return null;

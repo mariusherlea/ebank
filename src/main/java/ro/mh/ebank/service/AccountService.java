@@ -3,7 +3,6 @@ package ro.mh.ebank.service;
 
 import org.springframework.data.domain.Page;
 import ro.mh.ebank.model.Account;
-import ro.mh.ebank.model.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,5 +15,5 @@ public interface AccountService {
 
     Account getAccountById(Long id);
 
-    Account getAccountByUserId(Long userId);
+    List<Account> getAccountByUserId(Long userId);
 }
