@@ -13,7 +13,7 @@ import ro.mh.ebank.repository.UserRepository;
 import ro.mh.ebank.service.UserService;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 public class UserController {
 
 

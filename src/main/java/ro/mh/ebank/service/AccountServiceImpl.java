@@ -57,4 +57,9 @@ public class AccountServiceImpl implements AccountService {
     public List<Account> getAccountByUserId(Long userId) throws ResourceNotFoundException{
         return accountRepository.findByUserId(userId);
     }
+
+    @Override
+    public void deleteAccount(Long accountId) throws ResourceNotFoundException{
+        accountRepository.delete(getAccountById(accountId));
+    }
 }

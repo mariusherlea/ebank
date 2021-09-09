@@ -2,9 +2,9 @@ package ro.mh.ebank.controller;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -15,7 +15,7 @@ import ro.mh.ebank.service.AccountService;
 import ro.mh.ebank.service.UserService;
 
 @RestController
-@RequestMapping("/api/accounts")
+@RequestMapping("/accounts")
 public class AccountController {
 
     @Autowired
@@ -38,11 +38,10 @@ public class AccountController {
     }
 
     @GetMapping("/{id}")
-    public  ResponseEntity<Object> getAccountById(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<Object> getAccountById(@PathVariable(name = "id") Long id) {
 
         Account account = accountService.getAccountById(id);
 
-        // convert entity to DTO
         AccountDto accountResponse = modelMapper.map(account, AccountDto.class);
 
         return ResponseEntity.ok().body(accountResponse);
@@ -60,16 +59,11 @@ public class AccountController {
 
     }
 
-    <S, T> List<T> mapList(List<S> source, Class<T> targetClass) {
-        return source
-                .stream()
-                .map(element -> modelMapper.map(element, targetClass))
-                .collect(Collectors.toList());
-    }
+
 
     @PostMapping("/users/{userId}/accounts")
 
-    public Account createAccount(@PathVariable(value = "userId") Long userId , @RequestBody AccountDto accountDto) {
+    public Account createAccount(@PathVariable(value = "userId") Long userId, @RequestBody AccountDto accountDto) {
 
         Account accountRequest = modelMapper.map(accountDto, Account.class);
 
@@ -80,5 +74,16 @@ public class AccountController {
         return null;
     }
 
+    @DeleteMapping("/{id}")
+    public String deleteAccount(@PathVariable(name = "id") Long id) {
+        accountService.deleteAccount(id);
+        return "Account with " + id + "was successfully deleted";
+    }
 
+    <S, T> List<T> mapList(List<S> source, Class<T> targetClass) {
+        return source
+                .stream()
+                .map(element -> modelMapper.map(element, targetClass))
+                .collect(Collectors.toList());
+    }
 }
