@@ -74,6 +74,15 @@ public class AccountController {
         return null;
     }
 
+    @PutMapping("/update/{id}")
+    public Account updateAccount(@PathVariable long id, @RequestBody AccountDto accountDto) {
+
+        Account account = modelMapper.map(accountDto, Account.class);
+        account = accountService.updateAccount(id, account);
+        return account;
+
+    }
+
     @DeleteMapping("/{id}")
     public String deleteAccount(@PathVariable(name = "id") Long id) {
         accountService.deleteAccount(id);

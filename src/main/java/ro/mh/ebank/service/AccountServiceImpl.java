@@ -1,8 +1,6 @@
 package ro.mh.ebank.service;
 
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ro.mh.ebank.exception.ResourceNotFoundException;
 import ro.mh.ebank.model.Account;
@@ -61,5 +59,17 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void deleteAccount(Long accountId) throws ResourceNotFoundException{
         accountRepository.delete(getAccountById(accountId));
+    }
+
+    @Override
+    public Account updateAccount(long id, Account account) {
+        Account account1 = accountRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(id));
+
+        account1.setAccountNumber(account.getAccountNumber());
+        account1.setBank(account.getBank());
+        account1.setAmount(account.getAmount());
+
+        return accountRepository.save(account1);
     }
 }

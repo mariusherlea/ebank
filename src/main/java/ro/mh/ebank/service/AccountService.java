@@ -18,4 +18,6 @@ public interface AccountService {
     List<Account> getAccountByUserId(Long userId);
 
     void deleteAccount(Long accountId);
+
+    Account updateAccount(long id, Account account);
 }
